@@ -53,13 +53,7 @@
     font-style: normal;
   }
 
-  h1 {
-    @apply text-white text-[30px] font-bold;
-  }
 
-  p {
-    @apply text-white text-[16px] font-bold;
-  }
 
   .h1-bold {
     @apply text-[36px] font-bold leading-[140%] tracking-tighter;

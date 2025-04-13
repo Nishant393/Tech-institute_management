@@ -11,6 +11,8 @@ import AdminRoot from "./root/adminPages/AdminRoot";
 import CourseManagement from "./root/adminPages/pages/CourseManagement";
 import ProtectedAdminRoute from "./root/ProtectedAdminRoute";
 import CreateCourse from "./root/adminPages/pages/CreateCourse";
+import EditCourse from "./root/adminPages/pages/EditCourse";
+import CourseContent from "./root/adminPages/pages/CourseContent";
 
 
 
@@ -38,9 +40,9 @@ const App = () => {
                <Route path="courses/create" element={<CreateCourse />} />
               
             <Route path="courses/edit/:courseId" element={<EditCourse />} />
-             {/*
+             
             <Route path="courses/content/:courseId" element={<CourseContent />} />
-
+{/*
             <Route path="students" element={<StudentManagement />} />
             <Route path="students/profile/:studentId" element={<StudentProfile />} />
             <Route path="students/enrollment" element={<EnrollmentManagement />} />
