@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { toast } from 'react-hot-toast'; // Assuming you use react-toastify for notifications
+import { toast } from 'react-hot-toast';
 import server from '../../../cofig/config';
 
 const CreateCourse = () => {
-  // Initial form state
   const initialState = {
     title: '',
     category: '',
@@ -18,16 +17,15 @@ const CreateCourse = () => {
     skill: 'Beginner',
     certificate: false,
     lecture: 1,
+    price: 0,
   };
 
-  // State hooks
   const [formData, setFormData] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const [courseImage, setCourseImage] = useState(null);
   const [curriculamItem, setCurriculamItem] = useState('');
   const [learnItem, setLearnItem] = useState('');
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -36,12 +34,10 @@ const CreateCourse = () => {
     });
   };
 
-  // Handle file input change
   const handleFileChange = (e) => {
     setCourseImage(e.target.files[0]);
   };
 
-  // Add item to curriculam array
   const addCurriculamItem = () => {
     if (curriculamItem.trim()) {
       setFormData({
@@ -52,7 +48,6 @@ const CreateCourse = () => {
     }
   };
 
-  // Add item to whatYouWillLearn array
   const addLearnItem = () => {
     if (learnItem.trim()) {
       setFormData({
@@ -63,75 +58,70 @@ const CreateCourse = () => {
     }
   };
 
-  // Remove item from curriculam array
   const removeCurriculamItem = (index) => {
     const updatedCurriculam = [...formData.curriculam];
     updatedCurriculam.splice(index, 1);
     setFormData({ ...formData, curriculam: updatedCurriculam });
   };
 
-  // Remove item from whatYouWillLearn array
   const removeLearnItem = (index) => {
     const updatedLearn = [...formData.whatYouWillLearn];
     updatedLearn.splice(index, 1);
     setFormData({ ...formData, whatYouWillLearn: updatedLearn });
   };
 
-  // Form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!courseImage) {
       toast.error('Please select a course image');
       return;
     }
-    
+
     if (formData.curriculam.length === 0) {
       toast.error('Please add at least one curriculum item');
       return;
     }
-    
+
     if (formData.whatYouWillLearn.length === 0) {
       toast.error('Please add at least one learning outcome');
       return;
     }
-    
+
     try {
       setLoading(true);
-      
-      // Create a FormData object to send multipart/form-data
-      const formDataToSend  = {
-        title: formData.title,
-        category: formData.category,
-        about: formData.about,
-        description: formData.description,
-        language: formData.language,
-        instructor: formData.instructor,
-        curriculam: formData.curriculam,
-        whatYouWillLearn:formData.whatYouWillLearn,
-        duration: formData.duration,
-        skill: formData.skill,
-        certificate: formData.certificate,
-        lecture: formData.lecture,
-        courseImage:courseImage
-      }
-      
-      // Append course image
-      
-      console.log(formDataToSend)
-      // Send API request
+
+      const formDataToSend = new FormData();
+      formDataToSend.append('title', formData.title);
+      formDataToSend.append('category', formData.category);
+      formDataToSend.append('about', formData.about);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('language', formData.language);
+      formDataToSend.append('instructor', formData.instructor);
+      formDataToSend.append('duration', formData.duration);
+      formDataToSend.append('skill', formData.skill);
+      formDataToSend.append('certificate', formData.certificate);
+      formDataToSend.append('lecture', formData.lecture);
+      formDataToSend.append('price', formData.price);
+      formDataToSend.append('courseImage', courseImage);
+
+      formData.curriculam.forEach(item =>
+        formDataToSend.append('curriculam[]', item)
+      );
+      formData.whatYouWillLearn.forEach(item =>
+        formDataToSend.append('whatYouWillLearn[]', item)
+      );
+
       const response = await axios.post(`${server}course/add`, formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        withCredentials: true 
+        withCredentials: true,
       });
-      
+
       toast.success('Course added successfully!');
       setFormData(initialState);
       setCourseImage(null);
-      
-      console.log('Course created:', response.data);
     } catch (error) {
       console.error('Error adding course:', error);
       toast.error(error.response?.data?.message || 'Failed to add course');
@@ -143,9 +133,8 @@ const CreateCourse = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">Add New Course</h1>
-      
+
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Basic Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium mb-1">Course Title*</label>
@@ -158,7 +147,7 @@ const CreateCourse = () => {
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Category*</label>
             <input
@@ -170,7 +159,7 @@ const CreateCourse = () => {
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Language*</label>
             <input
@@ -182,7 +171,7 @@ const CreateCourse = () => {
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Instructor*</label>
             <input
@@ -194,7 +183,7 @@ const CreateCourse = () => {
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Duration (months)*</label>
             <input
@@ -207,7 +196,7 @@ const CreateCourse = () => {
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Number of Lectures*</label>
             <input
@@ -220,7 +209,7 @@ const CreateCourse = () => {
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Skill Level*</label>
             <select
@@ -236,7 +225,20 @@ const CreateCourse = () => {
               <option value="Expert">Expert</option>
             </select>
           </div>
-          
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Course Price (₹)*</label>
+            <input
+              type="number"
+              name="price"
+              min="0"
+              value={formData.price}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
+
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -248,8 +250,7 @@ const CreateCourse = () => {
             <label className="text-sm font-medium">Certificate Available</label>
           </div>
         </div>
-        
-        {/* About & Description */}
+
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">About Course*</label>
@@ -262,7 +263,7 @@ const CreateCourse = () => {
               required
             ></textarea>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Description*</label>
             <textarea
@@ -275,8 +276,7 @@ const CreateCourse = () => {
             ></textarea>
           </div>
         </div>
-        
-        {/* Course Image */}
+
         <div>
           <label className="block text-sm font-medium mb-1">Course Image*</label>
           <input
@@ -287,8 +287,7 @@ const CreateCourse = () => {
             required
           />
         </div>
-        
-        {/* Curriculum Items */}
+
         <div>
           <label className="block text-sm font-medium mb-1">Curriculum Items*</label>
           <div className="flex">
@@ -307,7 +306,7 @@ const CreateCourse = () => {
               Add
             </button>
           </div>
-          
+
           <ul className="mt-2 space-y-1">
             {formData.curriculam.map((item, index) => (
               <li key={index} className="flex justify-between items-center bg-gray-100 p-2 rounded">
@@ -323,8 +322,7 @@ const CreateCourse = () => {
             ))}
           </ul>
         </div>
-        
-        {/* What You Will Learn */}
+
         <div>
           <label className="block text-sm font-medium mb-1">What You Will Learn*</label>
           <div className="flex">
@@ -343,7 +341,7 @@ const CreateCourse = () => {
               Add
             </button>
           </div>
-          
+
           <ul className="mt-2 space-y-1">
             {formData.whatYouWillLearn.map((item, index) => (
               <li key={index} className="flex justify-between items-center bg-gray-100 p-2 rounded">
@@ -359,8 +357,7 @@ const CreateCourse = () => {
             ))}
           </ul>
         </div>
-        
-        {/* Submit Button */}
+
         <div>
           <button
             type="submit"

@@ -8,6 +8,7 @@ import { errorMiddleware } from "./middlewares/error.js";
 import userRoute from "./routes/user.js";
 import courseRoute from "./routes/courseRoute.js";
 import otpRoute from "./routes/otpRoute.js";
+import feedBackRoute from "./routes/feedBackRoute.js"
 import { corsOption } from "./utils/constant.js";
 import { connectDB } from "./utils/features.js";
 
@@ -56,6 +57,7 @@ app.get("/", (req, res) => {
 app.use("/user",userRoute);
 app.use("/course",courseRoute);
 app.use("/otp",otpRoute);
+app.use("/feedback",feedBackRoute);
 
 app.use(errorMiddleware)
 

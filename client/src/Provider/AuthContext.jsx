@@ -62,6 +62,8 @@ function AuthProvider({ children }) {
                     
                 })
                 .catch((e) => {
+                    setIsAdmin(false)
+                    setIsAuthenticated(false)
                     console.log(e)
                 })
         } catch (error) {

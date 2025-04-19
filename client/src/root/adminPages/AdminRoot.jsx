@@ -12,6 +12,8 @@ import {
   ChevronRight,
   LogOut
 } from "lucide-react";
+import axios from "axios";
+import server from "../../cofig/config";
 
 const AdminRoot = () => {
   const [expandedMenu, setExpandedMenu] = useState({
@@ -24,6 +26,20 @@ const AdminRoot = () => {
       ...expandedMenu,
       [menu]: !expandedMenu[menu]
     });
+  };
+
+  const handleLogout = () => {
+    try {
+        axios.post(`${server}user/logout`,{},{withCredentials:true}).then((d)=>{
+            toast.success('Logged out successfully');
+
+            getAuthUser()
+        }).catch((e)=>{
+            console.log(e)
+        })
+    } catch (error) {
+        console.log(error)
+    }
   };
 
   return (
@@ -192,7 +208,7 @@ const AdminRoot = () => {
         </nav>
         
         <div className="p-4 border-t border-purple-600">
-          <button className="flex items-center text-purple-100 hover:text-white w-full">
+          <button onClick={handleLogout} className="flex items-center text-purple-100 hover:text-white w-full">
             <LogOut size={18} className="mr-3" />
             <span>Logout</span>
           </button>

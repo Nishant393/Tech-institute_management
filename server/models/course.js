@@ -18,6 +18,11 @@ const courseSchema = new Schema(
             min: 1,
             description: "Duration in months"
         },
+        price: {
+            type: Number,
+            required: true,
+            min: 0,
+        },
         skill: {
             type: String,
             enum: ["Beginner", "Intermediate", "Advanced", "Expert", "beginner", "intermediate", "advanced", "expert"]

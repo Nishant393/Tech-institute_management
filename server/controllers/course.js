@@ -22,6 +22,7 @@ const courseValidationSchema = joi.object({
     whatYouWillLearn: joi.array().items(joi.string()).required(),
     duration: joi.number().integer().min(1).required(), // in months
     skill: joi.string().valid("Beginner", "Intermediate", "Advanced", "Expert", "beginner", "intermediate", "advanced", "expert").required(),
+    price:joi.number().required(),
     certificate: joi.boolean().required(),
     lecture: joi.number().integer().min(1).required(),
     courseUrl: joi.object({
@@ -36,7 +37,7 @@ const addCourse = async (req, res, next) => {
         const { error } = courseValidationSchema.validate(req.body);
         if (error) return next(new ErrorHandler(error.details[0].message, 400));
 
-        const { title, category, about, description, avgRating, enrolledStudent, language, instructor, curriculam, whatYouWillLearn, duration, skill, certificate, lecture } = req.body
+        const { title, category, about, description, avgRating, enrolledStudent, language, instructor, curriculam, whatYouWillLearn, duration, skill, certificate, lecture , price} = req.body
         const files = req.files;
         let courseUrl;
 
@@ -60,13 +61,13 @@ const addCourse = async (req, res, next) => {
 
 
         const course = await Course.create(
-            { title, category, about, description, avgRating, enrolledStudent, language, instructor, curriculam, whatYouWillLearn, duration, skill, certificate, lecture, courseUrl }
+            { title, category, about, description, avgRating, enrolledStudent, language, instructor, curriculam, whatYouWillLearn, duration, skill, certificate, lecture, courseUrl ,price }
         );
 
         res.status(201).json({
             success: true,
             message: "Course Created Successfully",
-            course
+            course 
         });
     } catch (error) {
         console.error(error);

@@ -89,6 +89,9 @@ export default function CourseContent() {
               <tr>
                 <td className="py-2 font-medium">Enrolled:</td>
                 <td>{course.enrolledStudent} students</td>
+              </tr><tr>
+                <td className="py-2 font-medium">price:</td>
+                <td>{course.price} </td>
               </tr>
             </tbody>
           </table>

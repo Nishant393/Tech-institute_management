@@ -9,11 +9,12 @@ const app = express.Router()
 
 app.use(isAuthenticated)
 
-app.post("/add",productImageMiddleware, addCourse);
-app.put("/update/:id",updateCourseById)
-// app.post("/edit",getMyProfile);
 app.get("/get",getCourses)
 app.get("/search",searchCourses)
 app.get("/:id",getCourseById)
+app.use(isAdmin)
+app.post("/add",productImageMiddleware, addCourse);
+app.put("/update/:id",updateCourseById)
+// app.post("/edit",getMyProfile);
 
 export default app;
