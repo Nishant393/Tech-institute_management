@@ -6,6 +6,7 @@ import {
   ChevronRight, Award, Calendar, Loader, AlertCircle
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import server from '../../../cofig/config';
 
 // Mock course data for "My Courses" section
 const mockCourses = [
@@ -160,7 +161,7 @@ export default function Profile() {
     setError(null);
     
     try {
-      const response = await axios.get('http://localhost:3000/user/me',{withCredentials:true});
+      const response = await axios.get(`${server}user/me`,{withCredentials:true});
       console.log(response.data)
       setUser(response.data.user);
     } catch (err) {

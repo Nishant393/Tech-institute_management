@@ -24,8 +24,9 @@ import CourseDetail from "./root/userPages/pages/CourseDetail";
 import Contact from "./root/userPages/pages/Contact";
 import Profile from "./root/userPages/pages/Profile";
 
+
 const App = () => {
-  return (
+    return (
     <>
       <main className="h-screen flex">
         <Routes>

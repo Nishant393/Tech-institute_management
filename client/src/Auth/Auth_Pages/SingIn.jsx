@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from "react-hot-toast";
 import { LogIn, Eye, EyeOff } from 'lucide-react';
+import server from "../../cofig/config"
+
 
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +21,7 @@ const SignIn = () => {
     
     try {
       const response = await axios.post(
-        "http://localhost:3000/user/login", 
+        `${server}user/login`, 
         {
           email: email.value,
           password: password.value,

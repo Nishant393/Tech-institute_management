@@ -5,6 +5,7 @@ import {
   Map, MessageSquare, Star, Send, 
   AlertCircle, BookOpen, Bug, Lightbulb, User
 } from 'lucide-react';
+import server from '../../../cofig/config';
 
 // Feedback type icons
 const feedbackTypeIcons = {
@@ -58,7 +59,7 @@ export default function Contact() {
       }
 
       // Send feedback to API
-      await axios.post('http://localhost:3000/feedback/submit', payload);
+      await axios.post(`${server}feedback/submit`, payload);
       
       // Show success message
       toast.success('Feedback submitted successfully!');
