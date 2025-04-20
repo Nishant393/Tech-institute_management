@@ -64,3 +64,6 @@ app.use(errorMiddleware)
 server.listen(port, () => {
     console.log(`Server is running at port ${port}`);
 });
+
+// 👇 Export for Vercel to use
+export default app;
