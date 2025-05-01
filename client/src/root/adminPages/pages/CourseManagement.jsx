@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Search, Filter, PlusCircle, Edit, Trash2, Eye, MoreHorizontal } from "lucide-react";
 import axios from "axios";
 import server from "../../../cofig/config.js";
+import { toast } from 'react-hot-toast';
+
 import { Autocomplete, TextField } from "@mui/material";
 
 const CourseManagement = () => {
@@ -15,7 +17,7 @@ const CourseManagement = () => {
     axios.get(`${server}course/search?keyword=${searchData}`, { withCredentials: true }).then((c) => {
       // setCourses(c.data.courses)
       setCourses(c.data.courses)
-    }).catch((e)=>{
+    }).catch((e) => {
       console.log(e)
     })
   }
@@ -23,14 +25,43 @@ const CourseManagement = () => {
     try {
       axios.get(`${server}course/get`, { withCredentials: true }).then((c) => {
         setCourses(c.data.courses)
-        
-      }).catch((e)=>{
+
+      }).catch((e) => {
         console.log(e)
       })
     } catch (error) {
       console.log(error)
     }
   }
+  const handleDelete = async (courseId) => {
+    const toastId = toast.loading('Deleting course...');
+
+    try {
+      // Send DELETE request to the backend API
+      const response = await axios.delete(`${server}course/${courseId}`,{withCredentials:true});
+
+      // Dismiss the loading toast
+      toast.dismiss(toastId);
+
+      // Show success toast
+      toast.success(response.data.message || 'Course deleted successfully');
+
+      // Execute the onSuccess callback if provided
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      // Dismiss the loading toast
+      toast.dismiss(toastId);
+
+      // Extract error message
+      const errorMessage =
+        error.response?.data?.message || 'Failed to delete course';
+
+      // Show error toast
+      toast.error(errorMessage);
+    }
+  };
+
+
   // Filter courses based on status
   const filteredCourses = filterStatus === "all"
     ? courses
@@ -38,7 +69,7 @@ const CourseManagement = () => {
 
   useEffect(() => {
     getCourses()
-  },[])
+  }, [])
 
   return (
     <div className="space-y-6">
@@ -57,7 +88,7 @@ const CourseManagement = () => {
       <div className="bg-white rounded-lg shadow p-4">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
           <div className="relative w-full md:w-64">
-            
+
             <Autocomplete
               placeholder="Search anything"
               inputValue={searchData}
@@ -83,7 +114,7 @@ const CourseManagement = () => {
                 />
               )}
             />
-           
+
           </div>
 
           <div className="flex items-center space-x-4">
@@ -147,7 +178,7 @@ const CourseManagement = () => {
                       <Link to={`/admin/courses/edit/${course._id}`} className="text-blue-600 hover:text-blue-900">
                         <Edit size={18} />
                       </Link>
-                      <button className="text-red-600 hover:text-red-900">
+                      <button onClick={()=>handleDelete(course._id)} className="text-red-600 hover:text-red-900">
                         <Trash2 size={18} />
                       </button>
                       <div className="relative">

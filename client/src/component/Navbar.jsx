@@ -9,7 +9,7 @@ import server from '../cofig/config';
 const Navbar = () => {
   const { isAuthanticated, user,getAuthUser } = useUserContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  console.log(user)
   
   const handleLogout = () => {
     try {

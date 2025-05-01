@@ -1,7 +1,7 @@
 import { Course } from "../models/course.js";
 import joi from "joi";
 import { ErrorHandler } from "../utils/utility.js";
-import { uploadFilesToCloudinary } from "../utils/features.js";
+import { deleteFileFromCloudinary, uploadFilesToCloudinary } from "../utils/features.js";
 import Joi from "joi";
 
 // 1. Joi Validation Schema for Course
@@ -204,6 +204,38 @@ const getCourseById = async (req, res, next) => {
         return next(new ErrorHandler("Failed to get course", 500));
     }
 };
+
+
+
+// Controller function to delete a course
+export const deleteCourse = async (req, res, next) => {
+  try {
+    const courseId = req.params.id;
+
+    // Retrieve the course by ID
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return next(new ErrorHandler("Course not found", 404));
+    }
+
+    // Delete the associated image from Cloudinary
+    if (course.courseUrl && course.courseUrl.public_id) {
+      await deleteFileFromCloudinary(course.courseUrl.public_id);
+    }
+
+    // Delete the course from the database
+    await Course.findByIdAndDelete(courseId);
+
+    res.status(200).json({
+      success: true,
+      message: "Course and associated image deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Error deleting course:", error);
+    return next(new ErrorHandler("Failed to delete course", 500));
+  }
+};
+
 
 
 

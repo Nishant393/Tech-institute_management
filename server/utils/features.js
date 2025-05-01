@@ -27,7 +27,7 @@ const sendToken = (res, user, code, message) => {
         throw new Error("Invalid user object");
     }
 
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '2d' }); 
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '2d' });
     // Fixed env variable key
     console.log(token)
     return res.status(code)
@@ -41,9 +41,9 @@ const sendToken = (res, user, code, message) => {
 
 // Convert file to base64 format
 const getBase64 = (file) => {
-    console.log("file for base 64",file)
-    console.log("file mimetype",file.mimetype)
-    console.log("file buffer",file.buffer)
+    console.log("file for base 64", file)
+    console.log("file mimetype", file.mimetype)
+    console.log("file buffer", file.buffer)
     return `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
 };
 
@@ -69,15 +69,26 @@ const uploadFilesToCloudinary = async (files) => {
             public_id: result.public_id,
             url: result.secure_url,
         }));
-        
+
     } catch (error) {
         console.error("Error uploading files to Cloudinary:", error);
         throw new Error("Failed to upload files to Cloudinary");
     }
 };
+const deleteFileFromCloudinary = async (publicId, resourceType = "image") => {
+    console.log("publicId",publicId)
+  if (!publicId) {
+    throw new Error("No public ID provided for deletion.");
+  }
 
-
-
+  try {
+    await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
+    console.log(`Deleted ${resourceType} with public_id: ${publicId}`);
+  } catch (error) {
+    console.error(`Error deleting ${resourceType} with public_id ${publicId}:`, error);
+    throw new Error(`Failed to delete ${resourceType} from Cloudinary`);
+  }
+};
 
 // Sanitize user data
 const sanitizeUser = (user) => {
@@ -97,4 +108,4 @@ const generateOTP = () => {
     return Math.floor(1000 + Math.random() * 9000).toString();
 };
 
-export { connectDB, sendToken, cookieOption, uploadFilesToCloudinary, sanitizeUser, generateOTP };
+export { connectDB, sendToken, cookieOption, uploadFilesToCloudinary, sanitizeUser, generateOTP, deleteFileFromCloudinary };

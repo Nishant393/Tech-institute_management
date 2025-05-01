@@ -14,10 +14,12 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import server from "../../cofig/config";
+import toast from "react-hot-toast";
 
 const AdminRoot = () => {
   const [expandedMenu, setExpandedMenu] = useState({
     courses: false,
+    recorded:false,
     students: false
   });
 
@@ -100,6 +102,44 @@ const AdminRoot = () => {
                         }
                       >
                         Create Course
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              <li>
+                <div 
+                  className="flex items-center justify-between p-3 rounded-lg text-purple-100 hover:bg-purple-800 cursor-pointer"
+                  onClick={() => toggleSubmenu('recorded')}
+                >
+                  <div className="flex items-center">
+                    <BookOpen size={18} className="mr-3" />
+                    <span>Rcorded Course Management</span>
+                  </div>
+                  {expandedMenu.recorded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                </div>
+                
+                {expandedMenu.recorded && (
+                  <ul className="pl-10 mt-1 space-y-1">
+                    <li>
+                      <NavLink 
+                        to="/admin/recorded" 
+                        className={({ isActive }) => 
+                          `block p-2 rounded-md ${isActive ? 'bg-purple-600 text-white' : 'text-purple-200 hover:bg-purple-600'}`
+                        }
+                      >
+                        All Courses
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink 
+                        to="/admin/recorded/create" 
+                        className={({ isActive }) => 
+                          `block p-2 rounded-md ${isActive ? 'bg-purple-600 text-white' : 'text-purple-200 hover:bg-purple-600'}`
+                        }
+                      >
+                        Create recorded Course
                       </NavLink>
                     </li>
                   </ul>

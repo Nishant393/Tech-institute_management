@@ -23,11 +23,31 @@ const sendOtpEmail = async (email, otp) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log(`OTP sent to ${email}`);
   } catch (error) {
     console.error('Error sending OTP email:', error);
     throw new Error('Error sending OTP email');
   }
 };
 
-export  { sendOtpEmail };
+const sendEmail = async (options) => {
+
+  // Define email options
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: options.email,
+    subject: options.subject,
+    html: options.html
+  };
+  // Send email
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error('Error sending notification email:', error);
+    throw new Error('Error sending notification email');
+  }
+
+};
+
+export  { sendOtpEmail , sendEmail };
+
+
