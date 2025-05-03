@@ -319,6 +319,7 @@ const CreateRecordedCourse = () => {
         videos,
         videoTitles,
         sectionTitles,
+        isPaid,
         durations
       };
       

@@ -28,6 +28,8 @@ import EditRecordedCourse from "./root/adminPages/pages/EditRecordedCourse";
 import RecordedCourseManagement from "./root/adminPages/pages/RecordedCourseManagement";
 import RecordedCourseDetails from "./root/adminPages/pages/RecordedCourseDetails";
 import Communications from "./root/adminPages/pages/Communications";
+import RecordedCourses from "./root/userPages/pages/RecordedCourses";
+import RecordedCoursesDetail from "./root/userPages/pages/RecordedCoursesDetail";
 
 
 const App = () => {
@@ -46,6 +48,8 @@ const App = () => {
               <Route index element={<Home />} />
               <Route path="courses" element={<Courses />} />
               <Route path="course/:courseId" element={<CourseDetail />} />
+              <Route path="rcourses" element={<RecordedCourses />} />
+              <Route path="rcourse/:id" element={<RecordedCoursesDetail />} />
               <Route path="contact" element={<Contact />} />
               <Route path="profile" element={<Profile />} />
 
@@ -54,10 +58,7 @@ const App = () => {
               {/*
             <Route path="recorded-courses" element={<RecordedCourses />} />
             <Route path="recorded-courses/:courseId" element={<RecordedCourseDetail />} />
-            <Route path="my-learning" element={<MyLearning />} />
-            <Route path="my-learning" element={<MyLearning />} />
-            <Route path="announcements" element={<Announcements />} />
-            <Route path="support" element={<Support />} /> */}
+            <Route path="my-learning" element={<MyLearning />} />*/}
             </Route>
           </Route>
 
@@ -76,11 +77,6 @@ const App = () => {
               <Route path="recorded/content/:courseId" element={<RecordedCourseDetails />} />
               <Route path="communications" element={<Communications />} />
               {/*
-              <Route path="user-management" element={<CreateRecordedCourse />} />
-                <Route path="recorded-courses" element={<RecordedCourseManagement />} />
-                <Route path="recorded-courses/create" element={<CreateRecordedCourse />} />
-                <Route path="recorded-courses/edit/:courseId" element={<EditRecordedCourse />} />
-                <Route path="recorded-courses/content/:courseId" element={<RecordedCourseContent />} />
               <Route path="students" element={<StudentManagement />} />
               <Route path="students/profile/:studentId" element={<StudentProfile />} />
               <Route path="students/enrollment" element={<EnrollmentManagement />} />

@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { 
-  BookOpen, User, Star, Clock, FileText, Users, CheckCircle, 
-  ArrowLeft, Globe, Award, Check, ChevronDown, ChevronUp, Play, Loader 
+import {
+  BookOpen, User, Star, Clock, FileText, Users, CheckCircle,
+  ArrowLeft, Globe, Award, Check, ChevronDown, ChevronUp, Play, Loader
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import server from '../../../cofig/config';
+import RecordedCourseFeedback from '../../../component/RecordedCourseFeedback';
+import { useUserContext } from '../../../Provider/AuthContext';
+import CourseFeedback from '../../../component/CourseFeedback';
 
 // Star rating component
 const StarRating = ({ rating }) => {
@@ -17,13 +20,12 @@ const StarRating = ({ rating }) => {
         <Star
           key={i}
           size={16}
-          className={`${
-            i < Math.floor(rating) 
-              ? "text-yellow-400 fill-yellow-400" 
-              : i < rating 
-                ? "text-yellow-400 fill-yellow-400 opacity-50" 
+          className={`${i < Math.floor(rating)
+              ? "text-yellow-400 fill-yellow-400"
+              : i < rating
+                ? "text-yellow-400 fill-yellow-400 opacity-50"
                 : "text-gray-300"
-          }`}
+            }`}
         />
       ))}
       {console.log(rating)}
@@ -64,7 +66,7 @@ const ErrorState = ({ message, onRetry }) => {
       </div>
       <h3 className="text-lg font-semibold text-gray-800 mb-2">Failed to load course</h3>
       <p className="text-gray-600 mb-4">{message}</p>
-      <button 
+      <button
         onClick={onRetry}
         className="bg-purple-700 hover:bg-purple-800 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300"
       >
@@ -77,7 +79,7 @@ const ErrorState = ({ message, onRetry }) => {
 // Learning Item Component
 const LearningItem = ({ text }) => {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       className="flex items-start mb-3"
@@ -96,7 +98,7 @@ const CurriculumSection = ({ data }) => {
 
   return (
     <div className="border border-gray-200 rounded-lg mb-3 overflow-hidden">
-      <button 
+      <button
         className="w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 transition-colors duration-300"
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -106,7 +108,7 @@ const CurriculumSection = ({ data }) => {
         </div>
         {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
       </button>
-      
+
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -138,31 +140,30 @@ const CurriculumSection = ({ data }) => {
 // Tab component for course sections
 const TabSection = ({ course }) => {
   const [activeTab, setActiveTab] = useState('description');
-  
+
   const tabs = [
     { id: 'description', label: 'Description' },
     { id: 'curriculum', label: 'Curriculum' },
     { id: 'instructor', label: 'Instructor' }
   ];
-  
+
   return (
     <div>
       <div className="flex border-b border-gray-200 mb-6">
         {tabs.map(tab => (
           <button
             key={tab.id}
-            className={`px-4 py-3 font-medium text-sm transition-colors duration-300 ${
-              activeTab === tab.id
-              ? 'text-purple-700 border-b-2 border-purple-700'
-              : 'text-gray-500 hover:text-gray-700'
-            }`}
+            className={`px-4 py-3 font-medium text-sm transition-colors duration-300 ${activeTab === tab.id
+                ? 'text-purple-700 border-b-2 border-purple-700'
+                : 'text-gray-500 hover:text-gray-700'
+              }`}
             onClick={() => setActiveTab(tab.id)}
           >
             {tab.label}
           </button>
         ))}
       </div>
-      
+
       <AnimatePresence mode="wait">
         <motion.div
           key={activeTab}
@@ -175,7 +176,7 @@ const TabSection = ({ course }) => {
             <div>
               <h3 className="text-lg font-semibold mb-3">About This Course</h3>
               <p className="text-gray-700 mb-6">{course.description}</p>
-              
+
               <h3 className="text-lg font-semibold mb-4">What You'll Learn</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
                 {course.whatYouWillLearn.map((item, index) => (
@@ -184,7 +185,7 @@ const TabSection = ({ course }) => {
               </div>
             </div>
           )}
-          
+
           {activeTab === 'curriculum' && (
             <div>
               <div className="flex justify-between items-center mb-4">
@@ -196,7 +197,7 @@ const TabSection = ({ course }) => {
               <CurriculumSection data={course.curriculam} />
             </div>
           )}
-          
+
           {activeTab === 'instructor' && (
             <div>
               <div className="flex items-start mb-6">
@@ -225,13 +226,14 @@ export default function CourseDetail() {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user , isAuthanticated} =useUserContext()
 
   const fetchCourseData = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      const response = await axios.get(`${server}course/${courseId}`,{withCredentials:true});
+      const response = await axios.get(`${server}course/${courseId}`, { withCredentials: true });
       setCourse(response.data.course);
       console.log(response.data)
       toast.success('Course details loaded successfully!');
@@ -307,7 +309,7 @@ export default function CourseDetail() {
   // Show course details
   return (
     <div className="min-h-screen bg-gray-50">
-      
+
       <div className="bg-purple-700 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <motion.div
@@ -315,7 +317,7 @@ export default function CourseDetail() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <button 
+            <button
               className="flex items-center text-white mb-4 hover:underline"
               onClick={() => {
                 // Handle navigation
@@ -326,7 +328,7 @@ export default function CourseDetail() {
               <ArrowLeft size={16} className="mr-1" />
               Back to Courses
             </button>
-            
+
             <div className="flex flex-col md:flex-row gap-6">
               <div className="md:w-2/3">
                 <span className="inline-block bg-white/20 text-white rounded-full px-3 py-1 text-sm font-medium mb-3">
@@ -334,7 +336,7 @@ export default function CourseDetail() {
                 </span>
                 <h1 className="text-3xl md:text-4xl font-bold mb-4">{course.title}</h1>
                 <p className="text-white/90 mb-4">{course.about}</p>
-                
+
                 <div className="flex flex-wrap items-center gap-4 mb-4">
                   <div className="flex items-center">
                     <StarRating rating={course.avgRating} />
@@ -349,7 +351,7 @@ export default function CourseDetail() {
                     <span>{course.instructor}</span>
                   </div>
                 </div>
-                
+
                 <div className="bg-white/10 rounded-lg p-3 inline-block">
                   <span className="text-sm">Last updated: {course.lastUpdated || "February 2025"}</span>
                 </div>
@@ -358,7 +360,7 @@ export default function CourseDetail() {
           </motion.div>
         </div>
       </div>
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-2/3">
@@ -368,27 +370,27 @@ export default function CourseDetail() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="bg-white rounded-xl shadow-md p-6 mb-8"
             >
-              <img 
-                src={course.courseUrl?.url || "/api/placeholder/800/400"} 
-                alt={course.title} 
+              <img
+                src={course.courseUrl?.url || "/api/placeholder/800/400"}
+                alt={course.title}
                 className="w-full h-64 object-cover rounded-lg mb-6"
               />
-              
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <FeatureBadge icon={Clock} text={`${course.duration} months`} />
                 <FeatureBadge icon={FileText} text={`${course.lecture} lectures`} />
                 <FeatureBadge icon={Users} text={`${course.enrolledStudent} students`} />
-                <FeatureBadge 
-                  icon={Award} 
-                  text={course.certificate ? "Certificate" : "No Certificate"} 
+                <FeatureBadge
+                  icon={Award}
+                  text={course.certificate ? "Certificate" : "No Certificate"}
                 />
               </div>
-              
+
               <TabSection course={course} />
             </motion.div>
           </div>
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
@@ -398,7 +400,7 @@ export default function CourseDetail() {
               <div className="mb-6">
                 <div className="text-3xl font-bold text-purple-700 mb-1">₹{course.price}</div>
               </div>
-              
+
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
@@ -407,7 +409,7 @@ export default function CourseDetail() {
               >
                 Enroll Now
               </motion.button>
-              
+
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
@@ -416,7 +418,7 @@ export default function CourseDetail() {
               >
                 Add to Wishlist
               </motion.button>
-              
+
               <div className="border-t border-gray-200 pt-4">
                 <h3 className="font-semibold mb-3">This course includes:</h3>
                 <ul className="space-y-3">
@@ -444,7 +446,7 @@ export default function CourseDetail() {
                   )}
                 </ul>
               </div>
-              
+
               <div className="mt-6 text-center">
                 <p className="text-sm text-gray-500">30-Day Money-Back Guarantee</p>
               </div>
@@ -452,6 +454,11 @@ export default function CourseDetail() {
           </motion.div>
         </div>
       </main>
+      <CourseFeedback
+        courseId={courseId}
+        isAuthanticated={isAuthanticated}
+        userId={user.id}
+      />
     </div>
   );
 }

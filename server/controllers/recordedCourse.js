@@ -7,6 +7,7 @@ export const createRecordedCourse = async (req, res, next) => {
       title, 
       description, 
       price, 
+      isPaid,
       createdBy,
       thumbnail, 
       videoTitles, 
@@ -39,6 +40,7 @@ export const createRecordedCourse = async (req, res, next) => {
       description,
       price,
       createdBy,
+      isPaid,
       thumbnail,
       videos:videoss,
     });
@@ -210,18 +212,7 @@ export const deleteRecordedCourse = async (req, res) => {
       }
     }
 
-    // // Delete the thumbnail from Cloudinary
-    // const thumbnailPublicId = course.thumbnail?.public_id;
-    // if (thumbnailPublicId) {
-    //   try {
-    //     await deleteFileFromCloudinary(thumbnailPublicId, "image");
-    //   } catch (err) {
-    //     console.error(`Failed to delete thumbnail with public_id ${thumbnailPublicId}:`, err);
-    //     // Optionally, handle the error
-    //   }
-    // }
-
-    // Delete the course from the database
+    
 
     await RecordedCourse.findByIdAndDelete(courseId);
 

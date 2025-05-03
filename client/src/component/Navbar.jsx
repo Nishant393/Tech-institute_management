@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, LogOut, Home, BookOpen, MessageSquare, Layers, User } from 'lucide-react';
+import { Menu, X, LogOut, Home, BookOpen, MessageSquare, Layers, User, Camera } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useUserContext } from '../Provider/AuthContext';
 import axios from 'axios';
@@ -64,6 +64,9 @@ const Navbar = () => {
             <Link to="/courses" className="flex items-center space-x-1 hover:text-purple-400 transition-colors">
               <BookOpen size={18} />
               <span>Courses</span>
+            </Link><Link to="/rcourses" className="flex items-center space-x-1 hover:text-purple-400 transition-colors">
+              <Camera size={18} />
+              <span>Recorded</span>
             </Link>
             <Link to="/contact" className="flex items-center space-x-1 hover:text-purple-400 transition-colors">
               <MessageSquare size={18} />
@@ -133,6 +136,13 @@ const Navbar = () => {
             >
               <BookOpen size={18} />
               <span>Courses</span>
+            </Link><Link 
+              to="/rcourses" 
+              className="flex items-center space-x-2 hover:text-purple-400 transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <BookOpen size={18} />
+              <span>Recorded</span>
             </Link>
             <Link 
               to="/contact" 

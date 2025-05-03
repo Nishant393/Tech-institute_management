@@ -11,6 +11,11 @@ const feedbackSchema = new Schema({
     ref: 'Course',
     required: false  // optional for general feedback
   },
+  recordedCourseId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'RecordedCourse',
+    required: false  // optional for general feedback
+  },
   feedbackType: {
     type: String,
     enum: ['Course', 'Module', 'BugReport', 'Suggestion'],
