@@ -6,11 +6,11 @@ import {
   AlertCircle, BookOpen, Bug, Lightbulb, User
 } from 'lucide-react';
 import server from '../../../cofig/config';
+import {useUserContext} from "../../../Provider/AuthContext"
+
 
 // Feedback type icons
 const feedbackTypeIcons = {
-  Course: <BookOpen size={20} className="text-purple-700" />,
-  Module: <BookOpen size={20} className="text-purple-700" />,
   BugReport: <Bug size={20} className="text-purple-700" />,
   Suggestion: <Lightbulb size={20} className="text-purple-700" />
 };
@@ -18,12 +18,12 @@ const feedbackTypeIcons = {
 export default function Contact() {
   // Form state
   const [formData, setFormData] = useState({
-    feedbackType: 'Course',
+    feedbackType: 'Suggestion',
     message: '',
     rating: 5
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const { user } = useUserContext()
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -50,16 +50,13 @@ export default function Contact() {
       // Mock user ID for demo purposes
       const payload = {
         ...formData,
-        userId: "64a76d3e8b9f9e1234567890" // Mock user ID
+        userId: user.id// Mock user ID
       };
       
-      // Optional courseId for Course and Module feedback types
-      if (['Course', 'Module'].includes(formData.feedbackType)) {
-        payload.courseId = "64a76d3e8b9f9e0987654321"; // Mock course ID
-      }
+      
 
       // Send feedback to API
-      await axios.post(`${server}feedback/submit`, payload);
+      await axios.post(`${server}feedback/submit`, payload,{withCredentials:true});
       
       // Show success message
       toast.success('Feedback submitted successfully!');
@@ -79,7 +76,7 @@ export default function Contact() {
   };
 
   // Determine if rating should be shown based on feedback type
-  const showRating = ['Course', 'Module'].includes(formData.feedbackType);
+  const showRating = ['Suggestion'].includes(formData.feedbackType);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -154,8 +151,6 @@ export default function Contact() {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full pl-10 p-3"
                         required
                       >
-                        <option value="Course">Course Feedback</option>
-                        <option value="Module">Module Feedback</option>
                         <option value="BugReport">Bug Report</option>
                         <option value="Suggestion">Suggestion</option>
                       </select>

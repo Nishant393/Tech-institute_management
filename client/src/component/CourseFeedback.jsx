@@ -21,7 +21,7 @@ const CourseFeedback = ({ courseId, isAuthanticated, userId }) => {
   const fetchFeedbacks = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`${server}feedback/recorded/${courseId}`,{withCredentials:true});
+      const { data } = await axios.get(`${server}feedback/course/${courseId}`,{withCredentials:true});
       console.log(data)
       setFeedbacks(data.feedbacks || []);
       setLoading(false);
@@ -48,7 +48,7 @@ const CourseFeedback = ({ courseId, isAuthanticated, userId }) => {
       setSubmitting(true);
       const { data } = await axios.post(`${server}feedback/submit`, {
         userId,
-        recordedCourseId: courseId,
+        courseId: courseId,
         feedbackType: feedback.feedbackType,
         rating: feedback.rating,
         message: feedback.message

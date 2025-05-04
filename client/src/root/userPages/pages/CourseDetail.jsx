@@ -235,7 +235,7 @@ export default function CourseDetail() {
     try {
       const response = await axios.get(`${server}course/${courseId}`, { withCredentials: true });
       setCourse(response.data.course);
-      console.log(response.data)
+      console.log("res",response.data)
       toast.success('Course details loaded successfully!');
     } catch (err) {
       console.error('Error fetching course:', err);

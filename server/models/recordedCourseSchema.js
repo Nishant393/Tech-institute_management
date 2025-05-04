@@ -7,6 +7,7 @@
       title: { type: String, required: true },
       description: String,
       thumbnail: String,
+      avgRating: { type: Number, min: 0, max: 5 },
       price: { type: Number, default: 0 },
       isPaid: { type: Boolean, default: false },
       videos: [

@@ -11,6 +11,7 @@ import otpRoute from "./routes/otpRoute.js";
 import recordedCourse from "./routes/recordedCourse.js";
 import feedBackRoute from "./routes/feedBackRoute.js"
 import noitfyRoute from "./routes/notify.js"
+import siteSettings from "./routes/siteSettings.js"
 import { corsOption } from "./utils/constant.js";
 import { connectDB } from "./utils/features.js";
 
@@ -65,6 +66,7 @@ app.use("/otp",otpRoute);
 app.use("/feedback",feedBackRoute);
 app.use("/recorded",recordedCourse);
 app.use("/notify",noitfyRoute);
+app.use("/site-settings",siteSettings);
 
 app.use(errorMiddleware)
 

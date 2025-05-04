@@ -1,18 +1,20 @@
 import { Feedback } from "../models/feedBack.js";
+import { Course } from "../models/course.js";
+import { RecordedCourse } from "../models/recordedCourseSchema.js";
 
 const submitFeedback = async (req, res) => {
     try {
-        const { userId, courseId, feedbackType, recordedCourseId, rating, message } = req.body;
-        console.log("userId", userId);
-        
+        const { userId, courseId, recordedCourseId, feedbackType, rating, message } = req.body;
+
         // Validate that at least one course ID is provided
-        if (!courseId && !recordedCourseId) {
-            return res.status(400).json({ 
-                success: false, 
-                error: "Either courseId or recordedCourseId is required" 
+        if (!userId && !message) {
+            return res.status(400).json({
+                success: false,
+                error: "Either user is required",
             });
         }
-        
+
+        // Create and save the feedback
         const feedback = new Feedback({
             userId,
             courseId,
@@ -23,9 +25,30 @@ const submitFeedback = async (req, res) => {
         });
 
         await feedback.save();
+
+        // If it's for a regular course with a rating, update avgRating
+        if (courseId && rating && ['Course', 'Module'].includes(feedbackType)) {
+            const feedbacks = await Feedback.find({
+                courseId,
+                rating: { $ne: null },
+                feedbackType: { $in: ['Course', 'Module'] }
+            });
+
+            const totalRating = feedbacks.reduce((sum, fb) => sum + fb.rating, 0);
+            const avgRating = totalRating / feedbacks.length;
+
+            await Course.findByIdAndUpdate(courseId, {
+                avgRating: avgRating.toFixed(1),
+            });
+            console.log("avgRating",avgRating)
+            await RecordedCourse.findByIdAndUpdate(courseId, {
+                avgRating: avgRating.toFixed(1),
+            });
+        }
+
         res.status(201).json({ success: true, feedback });
     } catch (err) {
-        console.log(err);
+        console.error("submitFeedback error:", err);
         res.status(500).json({ success: false, error: err.message });
     }
 };

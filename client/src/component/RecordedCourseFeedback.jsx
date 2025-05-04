@@ -21,7 +21,7 @@ const RecordedCourseFeedback = ({ courseId, isAuthanticated, userId }) => {
   const fetchFeedbacks = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`${server}feedback/course/${courseId}`,{withCredentials:true});
+      const { data } = await axios.get(`${server}feedback/recorded/${courseId}`,{withCredentials:true});
       console.log(data)
       setFeedbacks(data.feedbacks || []);
       setLoading(false);

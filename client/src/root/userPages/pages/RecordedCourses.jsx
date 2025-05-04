@@ -3,6 +3,29 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import server from '../../../cofig/config';
+import { Clock, Star } from 'lucide-react';
+
+
+// Star rating component
+const StarRating = ({ rating }) => {
+    return (
+        <div className="flex items-center">
+            {[...Array(5)].map((_, i) => (
+                <Star
+                    key={i}
+                    size={16}
+                    className={`${i < Math.floor(rating)
+                            ? "text-yellow-400 fill-yellow-400"
+                            : i < rating
+                            ? "text-yellow-400 fill-yellow-400 opacity-50"
+                            : "text-gray-300"
+                        }`}
+                />
+            ))}
+            <span className="ml-1 text-sm font-medium">{rating}</span>
+        </div>
+    );
+}
 
 const RecordedCourses = () => {
   const [courses, setCourses] = useState([]);
@@ -83,6 +106,9 @@ const RecordedCourses = () => {
                       {course.isPaid ? 'Premium' : 'Free'}
                     </span>
                   </div>
+                  <div className="flex justify-between items-center mb-3">
+                    <StarRating rating={course.avgRating} />
+                </div>
                 </div>
               </Link>
             ))}

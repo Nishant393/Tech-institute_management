@@ -30,12 +30,15 @@ import RecordedCourseDetails from "./root/adminPages/pages/RecordedCourseDetails
 import Communications from "./root/adminPages/pages/Communications";
 import RecordedCourses from "./root/userPages/pages/RecordedCourses";
 import RecordedCoursesDetail from "./root/userPages/pages/RecordedCoursesDetail";
+import WebsiteCustomization from "./root/userPages/pages/WebsiteCustomization";
+import MetaManager from "./component/MetaManager";
 
 
 const App = () => {
   return (
     <>
       <main className="h-screen flex">
+        <MetaManager/>
         <Routes>
 
           <Route element={<Auth />}>
@@ -76,12 +79,12 @@ const App = () => {
               <Route path="recorded/edit/:courseId" element={<EditRecordedCourse />} />
               <Route path="recorded/content/:courseId" element={<RecordedCourseDetails />} />
               <Route path="communications" element={<Communications />} />
+              <Route path="website-customization" element={<WebsiteCustomization />} />
               {/*
               <Route path="students" element={<StudentManagement />} />
               <Route path="students/profile/:studentId" element={<StudentProfile />} />
               <Route path="students/enrollment" element={<EnrollmentManagement />} />
               <Route path="students/progress" element={<ProgressTracking />} />
-              <Route path="website-customization" element={<WebsiteCustomization />} />
               */}
             </Route>
           </Route>

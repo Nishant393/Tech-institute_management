@@ -61,7 +61,7 @@ const addCourse = async (req, res, next) => {
 
 
         const course = await Course.create(
-            { title, category, about, description, avgRating, enrolledStudent, language, instructor, curriculam, whatYouWillLearn, duration, skill, certificate, lecture, courseUrl ,price }
+            { title, category, about, description, avgRating:0, enrolledStudent, language, instructor, curriculam, whatYouWillLearn, duration, skill, certificate, lecture, courseUrl ,price }
         );
 
         res.status(201).json({

@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import server from '../../../cofig/config';
-import CourseFeedback from '../../../component/CourseFeedback';
 import { useUserContext } from '../../../Provider/AuthContext';
 import RecordedCourseFeedback from '../../../component/RecordedCourseFeedback';
 
